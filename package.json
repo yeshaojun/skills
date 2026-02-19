@@ -1,0 +1,26 @@
+{
+  "name": "skills",
+  "version": "1.0.0",
+  "description": "OpenCode Skills Collection - A collection of reusable skills for OpenCode",
+  "private": true,
+  "scripts": {
+    "stock-analysis": "node skills/stock-investment-analysis/scripts/cli.js",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [
+    "opencode",
+    "skills",
+    "ai",
+    "stock-analysis",
+    "investment"
+  ],
+  "author": "yeshaojun",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yeshaojun/skills.git"
+  },
+  "workspaces": [
+    "skills/*"
+  ]
+}
