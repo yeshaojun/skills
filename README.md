@@ -7,7 +7,8 @@
 | Skill | 描述 | 版本 |
 |-------|------|------|
 | [stock-investment-analysis](./skills/stock-investment-analysis) | 企业投资价值分析框架，支持行业分析、竞争力分析、财务分析、估值模型和券商研报分析 | 1.3.0 |
-| [andy-invest-writer](./skills/andy-invest-writer) | 绍君的投资公众号长文写作skill，用于撰写投资分析文章、公司研究、行业分析 | 1.0.0 |
+| [invest-writer](./skills/invest-writer) | 投资公众号长文写作skill，用于撰写投资分析文章、公司研究、行业分析 | 1.0.0 |
+| [charlie-munger-perspective](./skills/charlie-munger-perspective) | 查理·芒格的思维框架与表达方式，作为思维顾问用芒格视角分析投资、商业、人生决策问题 | 1.0.0 |
 
 ---
 
@@ -128,10 +129,14 @@ skills/
 │   │       ├── prompt-templates.md    # Prompt 模板
 │   │       ├── scoring-framework.md   # 评分体系
 │   │       └── akshare-api.md         # API 参考
-│   └── andy-invest-writer/
+│   ├── invest-writer/
+│   │   ├── SKILL.md                    # Skill 定义（核心）
+│   │   └── references/                 # 参考文档（按需加载）
+│   │       └── invest_methodology.md  # 投资分析方法论
+│   └── charlie-munger-perspective/
 │       ├── SKILL.md                    # Skill 定义（核心）
+│       ├── scripts/                    # 可执行脚本
 │       └── references/                 # 参考文档（按需加载）
-│           └── invest_methodology.md  # 投资分析方法论
 ```
 
 ---
