@@ -7,6 +7,7 @@
 | Skill | 描述 | 版本 |
 |-------|------|------|
 | [stock-investment-analysis](./skills/stock-investment-analysis) | 企业投资价值分析框架，支持行业分析、竞争力分析、财务分析、估值模型和券商研报分析 | 1.3.0 |
+| [andy-invest-writer](./skills/andy-invest-writer) | 绍君的投资公众号长文写作skill，用于撰写投资分析文章、公司研究、行业分析 | 1.0.0 |
 
 ---
 
@@ -117,16 +118,20 @@ skills/
 ├── package.json                        # npm 配置
 ├── requirements.txt                    # Python 依赖
 ├── skills/                             # 所有 skills
-│   └── stock-investment-analysis/
+│   ├── stock-investment-analysis/
+│   │   ├── SKILL.md                    # Skill 定义（核心）
+│   │   ├── scripts/                    # 可执行脚本
+│   │   │   ├── fetch_data.py          # 数据获取
+│   │   │   ├── analyze.py             # 报告生成
+│   │   │   └── cli.js                 # CLI 入口
+│   │   └── references/                 # 参考文档（按需加载）
+│   │       ├── prompt-templates.md    # Prompt 模板
+│   │       ├── scoring-framework.md   # 评分体系
+│   │       └── akshare-api.md         # API 参考
+│   └── andy-invest-writer/
 │       ├── SKILL.md                    # Skill 定义（核心）
-│       ├── scripts/                    # 可执行脚本
-│       │   ├── fetch_data.py          # 数据获取
-│       │   ├── analyze.py             # 报告生成
-│       │   └── cli.js                 # CLI 入口
 │       └── references/                 # 参考文档（按需加载）
-│           ├── prompt-templates.md    # Prompt 模板
-│           ├── scoring-framework.md   # 评分体系
-│           └── akshare-api.md         # API 参考
+│           └── invest_methodology.md  # 投资分析方法论
 ```
 
 ---

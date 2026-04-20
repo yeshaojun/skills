@@ -1,0 +1,24 @@
+{
+  "name": "andy-invest-writer",
+  "version": "1.0.0",
+  "description": "绍君的投资公众号长文写作skill，用于撰写投资分析文章、公司研究、行业分析",
+  "main": "SKILL.md",
+  "keywords": [
+    "investment",
+    "writing",
+    "analysis",
+    "stock"
+  ],
+  "author": "yeshaojun",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yeshaojun/skills.git",
+    "directory": "skills/andy-invest-writer"
+  },
+  "files": [
+    "SKILL.md",
+    "scripts/",
+    "references/"
+  ]
+}
