@@ -7,7 +7,7 @@
 | Skill | 描述 | 版本 |
 |-------|------|------|
 | [stock-investment-analysis](./skills/stock-investment-analysis) | 企业投资价值分析框架，支持行业分析、竞争力分析、财务分析、估值模型和券商研报分析 | 1.3.0 |
-| [invest-writer](./skills/invest-writer) | 投资公众号长文写作skill，用于撰写投资分析文章、公司研究、行业分析 | 1.0.0 |
+| [invest-writer](./skills/invest-writer) | 投资长文写作 skill，强调问题驱动、扁平结构和投资者第一人称表达 | 1.1.1 |
 | [charlie-munger-perspective](./skills/charlie-munger-perspective) | 查理·芒格的思维框架与表达方式，作为思维顾问用芒格视角分析投资、商业、人生决策问题 | 1.0.0 |
 
 ---
@@ -107,6 +107,31 @@ Claude: 我来帮你分析贵州茅台的投资价值。
 [进行行业分析、竞争力分析、财务分析、估值分析等]
 
 最终生成综合分析报告...
+```
+
+---
+
+### 场景六：与 Codex 配合使用
+
+如果你在本地用 Codex，可以直接在 prompt 里引用 `invest-writer` 的 `SKILL.md` 路径。
+
+**本仓库里的本地路径**：
+
+```text
+/Users/andy/study/skills/skills/invest-writer/SKILL.md
+```
+
+**如果你安装到 Codex 全局 skills 目录**：
+
+```text
+~/.codex/skills/invest-writer/SKILL.md
+```
+
+**示例 prompt**：
+
+```text
+使用这个 skill：/Users/andy/study/skills/skills/invest-writer/SKILL.md
+基于海尔智家的最新财报和我的笔记，写一篇公众号长文。重点按“问题驱动 + 扁平结构 + 第一人称投资者视角”来写。
 ```
 
 ---
