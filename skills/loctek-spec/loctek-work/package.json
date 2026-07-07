@@ -1,0 +1,21 @@
+{
+  "name": "loctek-work",
+  "version": "0.1.0",
+  "description": "Execute development or debugging work from Loctek issue records and produce work reports.",
+  "main": "SKILL.md",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "scripts/",
+    "references/"
+  ],
+  "keywords": [
+    "agent-skills",
+    "implementation",
+    "debugging",
+    "issue",
+    "semantic-git"
+  ]
+}
+

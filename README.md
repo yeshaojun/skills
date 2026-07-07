@@ -102,6 +102,7 @@ skills/
   loctek-spec/
     loctek-init/
     loctek-issue/
+    loctek-work/
     loctek-commit/
     loctek-merge/
     loctek-test/
@@ -109,12 +110,13 @@ skills/
 
 ## Loctek Spec
 
-Loctek Spec 是一套中文优先的软件工程协作 skills，用 `.changes` 语义记录把 issue、commit、merge、test 串起来，降低 AI 合并冲突时丢功能的风险。
+Loctek Spec 是一套中文优先的软件工程协作 skills，用 `.changes` 语义记录把 issue、work、test、commit、merge 串起来，降低 AI 合并冲突时丢功能的风险。
 
 | Skill | 描述 |
 | --- | --- |
 | `loctek-init` | 初始化 `.changes`、PR 模板、CODEOWNERS、GitHub Action、Git hooks、校验脚本 |
-| `loctek-issue` | 中文版功能拆分，基于 tracer-bullet 垂直切片生成 issues |
+| `loctek-issue` | 中文版 issue 生成：功能需求拆垂直切片，bug 报告拆排查闭环 |
+| `loctek-work` | 根据 issue 执行开发、排查 bug、重构或验证，并生成 work report |
 | `loctek-commit` | 读取 staged diff，生成 `.changes/intents` 和 PR 草稿 |
 | `loctek-merge` | 读取双方 intent 后再合并，生成 merge report |
 | `loctek-test` | 根据 issue、intent、merge report 生成测试计划和报告 |

@@ -1,7 +1,7 @@
 {
   "name": "loctek-issue",
   "version": "0.1.0",
-  "description": "Chinese vertical-slice issue breakdown adapted from to-issues with Loctek .changes output.",
+  "description": "Chinese feature and bug issue generation adapted from to-issues with Loctek .changes output.",
   "main": "SKILL.md",
   "license": "MIT",
   "files": [
@@ -14,8 +14,9 @@
     "agent-skills",
     "issues",
     "planning",
+    "debugging",
+    "bug",
     "vertical-slice",
     "chinese"
   ]
 }
-

@@ -32,7 +32,7 @@ function template(name) {
 }
 
 ensureDir(join(repo, ".changes"));
-for (const dir of ["issues", "intents", "merge-reports", "test-reports", "pr", "adr", "releases"]) {
+for (const dir of ["issues", "work-reports", "intents", "merge-reports", "test-reports", "pr", "adr", "releases"]) {
   ensureDir(join(repo, ".changes", dir));
   writeNew(join(".changes", dir, ".gitkeep"), "");
 }
@@ -72,4 +72,3 @@ ${skipped.length ? skipped.map((item) => `- ${item}`).join("\n") : "- None"}
 writeNew(".changes/init-report.md", report);
 
 console.log(report);
-

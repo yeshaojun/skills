@@ -1,4 +1,4 @@
 interface:
   display_name: "Loctek Issue"
-  short_description: "Split specs into safe issues"
-  default_prompt: "Use $loctek-issue to turn this feature request into small, testable implementation issues."
+  short_description: "Create feature or bug issues"
+  default_prompt: "Use $loctek-issue to turn this request or bug report into small, testable Loctek issues."

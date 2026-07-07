@@ -8,6 +8,7 @@ Loctek skills share one project-local protocol. The point is to preserve semanti
 .changes/
   config.yml
   issues/
+  work-reports/
   intents/
   merge-reports/
   test-reports/
@@ -20,10 +21,13 @@ Loctek skills share one project-local protocol. The point is to preserve semanti
 
 ### Issue
 
+Feature issue:
+
 ```markdown
 ---
 type: issue
 id: ISSUE-001
+issue_kind: feature
 status: draft
 risk: medium
 ---
@@ -40,6 +44,33 @@ risk: medium
 ## 测试计划
 ## 回滚考虑
 ## 拆分方案
+```
+
+Bug issue:
+
+```markdown
+---
+type: issue
+id: ISSUE-002
+issue_kind: bug
+status: draft
+risk: medium
+---
+
+# 标题
+
+## 现象
+## 期望行为
+## 复现信息
+## 已知事实
+## 初始假设
+## 排查计划
+## 修复边界
+## 验收标准
+## 必须保留的行为
+## 回归测试计划
+## 需要补充的信息
+## 回滚考虑
 ```
 
 ### Commit Intent
@@ -61,6 +92,30 @@ status: draft
 ## 验证方式
 ## 风险点
 ## 关联 Issue
+```
+
+### Work Report
+
+```markdown
+---
+type: work-report
+issue: ISSUE-001
+branch: feature/example
+status: draft
+---
+
+# Work Report
+
+## Issue
+## Understanding
+## Investigation
+## Implementation
+## Acceptance Criteria
+## Tests
+## Files Changed
+## Behavior Preserved
+## Bug Details
+## Follow-ups
 ```
 
 ### Merge Report
@@ -109,6 +164,8 @@ status: draft
 - Prefer many small records over one shared file that causes conflicts.
 - Never overwrite existing `.changes` records without explicit user approval.
 - Treat `.changes` records as evidence, not truth. Verify against code, tests, PRs, and issues.
+- Issue skills must classify each issue as `issue_kind: feature` or `issue_kind: bug` before splitting work.
+- Bug issues must stay focused on symptoms, reproduction, hypotheses, fix boundary, and regression tests. Do not expand them into broad module optimization unless the user explicitly asks.
+- Work skills must read the selected issue and create/update a work report before handing off to test or commit.
 - Merge skills must read relevant issue and intent records before resolving conflicts.
 - Test skills must read intent and merge reports before selecting tests.
-

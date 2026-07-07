@@ -1,6 +1,23 @@
 version: 1
 project: loctek
 language: zh-CN
+issue:
+  kinds:
+    - feature
+    - bug
+  bug_mode:
+    avoid_module_optimization: true
+    required_sections:
+      - 现象
+      - 期望行为
+      - 复现信息
+      - 已知事实
+      - 初始假设
+      - 排查计划
+      - 修复边界
+      - 验收标准
+      - 必须保留的行为
+      - 回归测试计划
 intent:
   required_sections:
     - 为什么改
@@ -9,6 +26,18 @@ intent:
     - 必须保留的行为
     - 验证方式
     - 风险点
+work:
+  require_report: true
+  required_sections:
+    - Issue
+    - Understanding
+    - Investigation
+    - Implementation
+    - Acceptance Criteria
+    - Tests
+    - Files Changed
+    - Behavior Preserved
+    - Follow-ups
 merge:
   require_report_on_conflict: true
   inspect_semantic_conflicts: true
@@ -37,4 +66,3 @@ risk_files:
   - src/auth/**
   - src/payment/**
 max_pr_changed_lines: 500
-

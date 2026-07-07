@@ -1,0 +1,5 @@
+interface:
+  display_name: "Loctek Work"
+  short_description: "Implement or debug from Loctek issues"
+  default_prompt: "Use $loctek-work to implement or debug the selected Loctek issue and write a work report."
+
