@@ -4,24 +4,93 @@
 
 ## 安装
 
-安装仓库里的全部 skills：
+先查看仓库里有哪些 skills：
 
 ```bash
-npx skills@latest add yeshaojun/skills --all
+npx skills@latest add yeshaojun/skills --list
 ```
 
-只安装 Loctek Spec 套件里的某个 skill：
+交互式安装，按提示选择 skill 和 AI 工具：
+
+```bash
+npx skills@latest add yeshaojun/skills
+```
+
+在普通终端里运行时，`skills` CLI 会按顺序询问：
+
+1. 选择要安装的 skill。
+2. 选择要安装到哪些 AI 工具，例如 Codex、Claude Code、Cursor。
+3. 选择安装范围：Project 或 Global。
+4. 选择安装方式：Symlink 或 Copy。
+
+注意：第 4 步只有在所选 agent 对应多个安装目录时才会出现。比如只选 Codex 时通常只写入 `.agents/skills`，CLI 会直接 copy；同时选择 Codex 和 Claude Code 时，才需要在 symlink/copy 之间选择。
+
+如果你是在 Codex、CI 或其他非交互环境里执行，CLI 可能会检测到 agent 环境并自动走非交互安装。给普通用户的安装文档应推荐他们在自己的终端里运行上面的命令。
+
+只安装某一个 skill：
 
 ```bash
 npx skills@latest add yeshaojun/skills --skill loctek-issue
+```
+
+安装多个指定 skills：
+
+```bash
+npx skills@latest add yeshaojun/skills --skill loctek-init loctek-issue loctek-commit
+```
+
+安装到指定 AI 工具：
+
+```bash
+npx skills@latest add yeshaojun/skills --skill loctek-issue --agent codex
+npx skills@latest add yeshaojun/skills --skill loctek-issue --agent claude-code
+npx skills@latest add yeshaojun/skills --skill loctek-issue --agent cursor
+```
+
+安装到多个 AI 工具：
+
+```bash
+npx skills@latest add yeshaojun/skills --skill loctek-issue --agent codex claude-code cursor
+```
+
+全局安装：
+
+```bash
+npx skills@latest add yeshaojun/skills --skill loctek-issue --agent codex -g
 ```
 
 本地调试：
 
 ```bash
 npx skills@latest add /Users/andy/study/skills --list
-npx skills@latest add /Users/andy/study/skills --all
+npx skills@latest add /Users/andy/study/skills --skill loctek-issue --agent codex
 ```
+
+不建议默认使用 `--all`。在 `skills` CLI 中，`--all` 等价于 `--skill '*' --agent '*' -y`，会把所有 skills 安装到所有支持的 agent，容易生成多套 agent 目录。
+
+## Agent 目录说明
+
+每个 skill 自带的 `agents/openai.yaml` 是 skill 的 UI 元数据，属于 skill 包内容，不是安装目标目录。
+
+安装时生成的 `.agents/skills` 是 `skills` CLI 的通用 project-level skill 目录。Codex、Cursor、Gemini 等多种工具会复用这个目录。
+
+如果同时选择 `claude-code`，CLI 可能还会生成 `.claude/skills`，并把它链接到 `.agents/skills` 里的规范副本。这不是重复内容，而是为了兼容不同 AI 工具的目录约定。
+
+如果你不希望生成链接结构，可以使用 `--copy`：
+
+```bash
+npx skills@latest add yeshaojun/skills --skill loctek-issue --agent claude-code --copy
+```
+
+常用 agent 名称：
+
+| 工具 | `--agent` 参数 |
+| --- | --- |
+| Codex | `codex` |
+| Claude Code | `claude-code` |
+| Cursor | `cursor` |
+| Gemini CLI | `gemini-cli` |
+| GitHub Copilot | `github-copilot` |
 
 ## 分类
 
@@ -79,4 +148,3 @@ npx skills@latest add /Users/andy/study/skills --list
 ## License
 
 MIT
-
