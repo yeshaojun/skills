@@ -1,26 +1,25 @@
 {
   "name": "skills",
   "version": "1.0.0",
-  "description": "OpenCode Skills Collection - A collection of reusable skills for OpenCode",
+  "description": "Personal agent skills collection with categorized skills for engineering and investing.",
   "private": true,
   "scripts": {
-    "stock-analysis": "node skills/stock-investment-analysis/scripts/cli.js",
-    "test": "echo \"No tests yet\""
+    "skills:list": "find skills -maxdepth 3 -name SKILL.md -print",
+    "skills:check": "node scripts/validate-skills.mjs",
+    "test": "node scripts/validate-skills.mjs"
   },
   "keywords": [
     "opencode",
     "skills",
     "ai",
-    "stock-analysis",
-    "investment"
+    "investment",
+    "loctek-spec",
+    "semantic-git"
   ],
   "author": "yeshaojun",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/yeshaojun/skills.git"
-  },
-  "workspaces": [
-    "skills/*"
-  ]
+  }
 }

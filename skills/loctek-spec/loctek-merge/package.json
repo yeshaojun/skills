@@ -1,0 +1,21 @@
+{
+  "name": "loctek-merge",
+  "version": "0.1.0",
+  "description": "Intent-aware Git merge and conflict resolution with Loctek merge reports.",
+  "main": "SKILL.md",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "scripts/",
+    "references/"
+  ],
+  "keywords": [
+    "agent-skills",
+    "git",
+    "merge",
+    "conflict",
+    "semantic-git"
+  ]
+}
+

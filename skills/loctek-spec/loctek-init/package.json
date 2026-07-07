@@ -1,0 +1,22 @@
+{
+  "name": "loctek-init",
+  "version": "0.1.0",
+  "description": "Initialize Loctek .changes governance, PR templates, hooks, and CI checks.",
+  "main": "SKILL.md",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "assets/",
+    "scripts/",
+    "references/"
+  ],
+  "keywords": [
+    "agent-skills",
+    "init",
+    "git-hooks",
+    "ci",
+    "semantic-git"
+  ]
+}
+

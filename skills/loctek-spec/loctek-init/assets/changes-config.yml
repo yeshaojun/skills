@@ -1,0 +1,40 @@
+version: 1
+project: loctek
+language: zh-CN
+intent:
+  required_sections:
+    - 为什么改
+    - 改了什么
+    - 涉及文件
+    - 必须保留的行为
+    - 验证方式
+    - 风险点
+merge:
+  require_report_on_conflict: true
+  inspect_semantic_conflicts: true
+test:
+  require_report: true
+  commands:
+    javascript:
+      - npm test
+      - npm run lint
+      - npm run typecheck
+      - npm run build
+    python:
+      - pytest
+    go:
+      - go test ./...
+risk_files:
+  - package.json
+  - pnpm-lock.yaml
+  - package-lock.json
+  - yarn.lock
+  - .github/**
+  - db/**
+  - migrations/**
+  - src/routes/**
+  - src/permissions/**
+  - src/auth/**
+  - src/payment/**
+max_pr_changed_lines: 500
+

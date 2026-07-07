@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loctek Test"
+  short_description: "Plan and run intent-aware tests"
+  default_prompt: "Use $loctek-test to build a risk-based test plan for this change."

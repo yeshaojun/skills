@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loctek Init"
+  short_description: "Initialize Loctek governance files"
+  default_prompt: "Use $loctek-init to initialize semantic change governance in this repository."

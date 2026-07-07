@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loctek Merge"
+  short_description: "Merge using preserved intent records"
+  default_prompt: "Use $loctek-merge to merge this branch with intent-aware conflict analysis."

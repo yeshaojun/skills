@@ -1,0 +1,21 @@
+{
+  "name": "loctek-test",
+  "version": "0.1.0",
+  "description": "Intent-aware test planning and execution reports for Loctek changes.",
+  "main": "SKILL.md",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "scripts/",
+    "references/"
+  ],
+  "keywords": [
+    "agent-skills",
+    "testing",
+    "ci",
+    "regression",
+    "semantic-git"
+  ]
+}
+

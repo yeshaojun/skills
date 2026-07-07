@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loctek Commit"
+  short_description: "Create semantic commits and PR drafts"
+  default_prompt: "Use $loctek-commit to summarize my staged diff and create a semantic commit intent."

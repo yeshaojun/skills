@@ -1,0 +1,21 @@
+{
+  "name": "loctek-commit",
+  "version": "0.1.0",
+  "description": "Create Chinese semantic commit intent records and PR drafts from staged diffs.",
+  "main": "SKILL.md",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "scripts/",
+    "references/"
+  ],
+  "keywords": [
+    "agent-skills",
+    "git",
+    "commit",
+    "pr",
+    "semantic-git"
+  ]
+}
+
