@@ -1,6 +1,15 @@
 version: 1
 project: loctek
 language: zh-CN
+governance:
+  mode: lightweight
+  ask_only_when:
+    - low_confidence_issue_match
+    - dangerous_file
+    - permission_problem
+    - unresolved_conflict
+    - destructive_operation
+  strictest_phase: merge
 issue:
   kinds:
     - feature
@@ -26,6 +35,22 @@ intent:
     - 必须保留的行为
     - 验证方式
     - 风险点
+commit:
+  default_mode: commit
+  allow_prepare: true
+  allow_multiple_issues: true
+  require_multi_issue_reason: false
+  never_push: true
+  use_explicit_git_add: true
+  blocked_patterns:
+    - .env
+    - .env.*
+    - "*.pem"
+    - "*.key"
+    - "*.p12"
+    - "*.pfx"
+    - "*.log"
+    - node_modules/**
 work:
   require_report: true
   required_sections:
@@ -43,6 +68,8 @@ merge:
   inspect_semantic_conflicts: true
 test:
   require_report: true
+  ordinary_changes_allow_not_run_reason: true
+  high_risk_requires_validation: true
   commands:
     javascript:
       - npm test

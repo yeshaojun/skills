@@ -14,3 +14,10 @@ Use it to preserve intent:
 - `releases/`: release notes and rollback plans.
 
 Do not keep one shared mutable file for all changes. Prefer one small file per issue, change, merge, or test run.
+
+If Loctek records appear deleted after commit, check ownership first:
+
+```bash
+node tools/loctek/check-permissions.mjs
+sudo chown -R "$(id -u):$(id -g)" .changes tools/loctek
+```

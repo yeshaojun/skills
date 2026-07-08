@@ -1,6 +1,16 @@
 # Loctek `.changes` Protocol
 
-Loctek skills share one project-local protocol. The point is to preserve semantic intent across issue planning, commit, merge, and test phases.
+Loctek skills share one project-local protocol. The point is to preserve semantic intent across issue planning, commit, merge, and test phases without turning small-team development into heavy process.
+
+## Operating Mode
+
+Default to lightweight governance:
+
+- Automate routine steps.
+- Ask the user only when confidence is low or the operation is risky.
+- Record uncertainty instead of blocking normal development.
+- Block only dangerous commits, permission problems, unresolved conflicts, or merge decisions that could drop behavior.
+- Keep merge strict: read intents/issues/work reports before resolving conflicts.
 
 ## Directory
 
@@ -164,8 +174,10 @@ status: draft
 - Prefer many small records over one shared file that causes conflicts.
 - Never overwrite existing `.changes` records without explicit user approval.
 - Treat `.changes` records as evidence, not truth. Verify against code, tests, PRs, and issues.
+- `.changes` and `tools/loctek` must be writable by the normal development user. If they are root-owned, run `sudo chown -R "$(id -u):$(id -g)" .changes tools/loctek` before commit.
 - Issue skills must classify each issue as `issue_kind: feature` or `issue_kind: bug` before splitting work.
 - Bug issues must stay focused on symptoms, reproduction, hypotheses, fix boundary, and regression tests. Do not expand them into broad module optimization unless the user explicitly asks.
-- Work skills must read the selected issue and create/update a work report before handing off to test or commit.
+- Work skills should infer the related issue when confidence is high; ask only when multiple plausible issues exist.
+- Commit skills default to committing safe related changes. They must use explicit `git add -- <files>`, never `git add .`, and must not push. Multiple issues are allowed when the intent explains why they belong together.
 - Merge skills must read relevant issue and intent records before resolving conflicts.
-- Test skills must read intent and merge reports before selecting tests.
+- Test skills should run focused checks. High-risk changes need stronger validation; ordinary changes may record a clear "not run" reason.

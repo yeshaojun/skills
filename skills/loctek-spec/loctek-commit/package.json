@@ -1,7 +1,7 @@
 {
   "name": "loctek-commit",
   "version": "0.1.0",
-  "description": "Create Chinese semantic commit intent records and PR drafts from staged diffs.",
+  "description": "Commit current safe related changes with Chinese semantic intent records and PR drafts.",
   "main": "SKILL.md",
   "license": "MIT",
   "files": [
@@ -18,4 +18,3 @@
     "semantic-git"
   ]
 }
-
