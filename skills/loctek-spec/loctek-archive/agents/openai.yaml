@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loctek Archive"
+  short_description: "Archive completed .changes records"
+  default_prompt: "Use $loctek-archive to dry-run and archive completed Loctek issue, branch, or merge records."

@@ -35,6 +35,27 @@ intent:
     - 必须保留的行为
     - 验证方式
     - 风险点
+  read_session_notes: true
+session_notes:
+  enabled: true
+  directory: .changes/session-notes
+  write_when:
+    - user_key_decision
+    - scope_change
+    - rejected_approach
+    - implementation_reasoning
+    - merge_preserve_behavior
+  do_not_store:
+    - secrets
+    - credentials
+    - full_raw_transcripts
+archive:
+  enabled: true
+  directory: .changes/archive
+  default_read: false
+  auto_after_merge_when_safe: true
+  auto_after_test_when_issue_complete: false
+  dry_run_first: true
 commit:
   default_mode: commit
   allow_prepare: true
@@ -66,10 +87,12 @@ work:
 merge:
   require_report_on_conflict: true
   inspect_semantic_conflicts: true
+  archive_after_success_when_safe: true
 test:
   require_report: true
   ordinary_changes_allow_not_run_reason: true
   high_risk_requires_validation: true
+  suggest_archive_when_issue_complete: true
   commands:
     javascript:
       - npm test

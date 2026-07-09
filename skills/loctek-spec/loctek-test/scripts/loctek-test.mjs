@@ -61,6 +61,16 @@ TODO
 ## 回归风险
 
 TODO
+
+## 归档建议
+
+如果本次测试确认相关 issue 已完成，先 dry-run 归档：
+
+\`\`\`bash
+node tools/loctek/archive.mjs . --branch ${branch} --dry-run
+\`\`\`
+
+只有 dry-run 结果全部属于已完成工作时，才去掉 \`--dry-run\`。如果记录混杂或验收标准未完成，请保留活跃记录。
 `;
 
 if (!existsSync(path)) writeFileSync(path, report);

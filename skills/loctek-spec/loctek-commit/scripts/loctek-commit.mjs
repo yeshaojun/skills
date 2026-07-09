@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { accessSync, constants, existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
+import { accessSync, constants, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative as pathRelative, resolve } from "node:path";
 
 const repo = resolve(process.argv[2] || process.cwd());
@@ -51,12 +51,13 @@ const workNameStatus = git(["diff", "--cached", "--name-status"]);
 const workStat = git(["diff", "--cached", "--stat"]);
 const workDiff = git(["diff", "--cached", "--", "."]);
 if (!workNameStatus) fail("No staged diff found after selecting files.");
+const sessionNotes = collectSessionNotes({ branch, issues: options.issues, selected });
 
 const intentRel = relative(intentPath, repo);
 const prRel = relative(prPath, repo);
 const highRisk = selected.filter(isHighRiskFile);
 
-writeFileSync(intentPath, buildIntent({ branch, workNameStatus, workStat, workDiff, highRisk, blocked }));
+writeFileSync(intentPath, buildIntent({ branch, workNameStatus, workStat, workDiff, highRisk, blocked, sessionNotes }));
 writeFileSync(prPath, buildPr({ workNameStatus, highRisk, intentRel }));
 
 git(["add", "--", intentRel, prRel]);
@@ -170,7 +171,7 @@ function selectFiles(files, opts) {
   });
 }
 
-function buildIntent({ branch, workNameStatus, workStat, workDiff, highRisk, blocked }) {
+function buildIntent({ branch, workNameStatus, workStat, workDiff, highRisk, blocked, sessionNotes }) {
   return `${intentFrontmatter(branch)}
 
 # Change Intent
@@ -208,6 +209,10 @@ ${options.issues.length ? options.issues.map((issue) => `- ${issue}`).join("\n")
 ## 多 Issue 说明
 
 ${options.issues.length > 1 ? options.multiIssueReason || "TODO: 说明为什么这些 issue 适合一起提交。" : "N/A"}
+
+## 会话决策记录
+
+${formatSessionNotes(sessionNotes)}
 
 ## Diff Stat
 
@@ -455,6 +460,70 @@ function formatRiskText(highRisk, blocked) {
   if (highRisk.length) parts.push(`高风险文件：${highRisk.join(", ")}`);
   if (blocked.length) parts.push(`已排除危险文件：${blocked.map((item) => `${item.file} (${item.reason})`).join(", ")}`);
   return parts.length ? parts.join("\n") : "未检测到高风险文件。";
+}
+
+function collectSessionNotes({ branch, issues, selected }) {
+  const root = join(repo, ".changes", "session-notes");
+  if (!existsSync(root)) return [];
+  const files = walkFiles(root)
+    .filter((path) => basename(path) !== ".gitkeep" && basename(path) !== "_template.md")
+    .filter((path) => statSync(path).isFile())
+    .map((path) => {
+      const text = safeRead(path);
+      return {
+        path,
+        rel: relative(path, repo),
+        text,
+        mtime: statSync(path).mtimeMs,
+      };
+    });
+
+  const currentBranchSafe = sanitize(branch);
+  const selectedHints = selected.map((file) => file.toLowerCase());
+  const issueHints = issues.map((issue) => issue.toLowerCase());
+
+  return files
+    .filter((file) => {
+      const haystack = `${file.rel}\n${file.text}`.toLowerCase();
+      if (haystack.includes(branch.toLowerCase()) || haystack.includes(currentBranchSafe.toLowerCase())) return true;
+      if (issueHints.some((issue) => haystack.includes(issue))) return true;
+      return selectedHints.some((changed) => haystack.includes(changed));
+    })
+    .sort((a, b) => b.mtime - a.mtime)
+    .slice(0, 5);
+}
+
+function formatSessionNotes(notes) {
+  if (!notes.length) return "未发现与当前分支、issue 或改动文件匹配的 session notes。";
+  return notes
+    .map((note) => {
+      const excerpt = truncate(note.text.replace(/\r?\n{3,}/g, "\n\n").trim(), 4000);
+      return `### ${note.rel}
+
+\`\`\`markdown
+${excerpt}
+\`\`\``;
+    })
+    .join("\n\n");
+}
+
+function walkFiles(root) {
+  const out = [];
+  for (const entry of readdirSync(root)) {
+    const path = join(root, entry);
+    const stat = statSync(path);
+    if (stat.isDirectory()) out.push(...walkFiles(path));
+    else out.push(path);
+  }
+  return out;
+}
+
+function safeRead(path) {
+  try {
+    return readFileSync(path, "utf8");
+  } catch {
+    return "";
+  }
 }
 
 function printBlocked(blocked) {

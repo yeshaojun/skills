@@ -131,7 +131,25 @@ status: complete
 ## 手工验证
 
 ## 回归风险
+
+## 归档建议
 ```
+
+### 7. 归档提示
+
+当测试报告确认某个 issue 已完成时，默认自动尝试归档：先给出并执行 dry-run 命令：
+
+```bash
+node tools/loctek/archive.mjs . --issue ISSUE-001 --dry-run
+```
+
+如果只能根据分支归档：
+
+```bash
+node tools/loctek/archive.mjs . --branch feature/x --dry-run
+```
+
+dry-run 结果只包含已完成工作，且归档脚本没有提示 issue 未完成时，再执行正式归档。无法确定时，在报告里写清楚需要用户手动归档。
 
 ## 完成标准
 
@@ -140,3 +158,4 @@ status: complete
 - 命令输出被总结到报告。
 - 未运行测试必须写原因。
 - 发现 bug 后优先补回归测试。
+- 已对完成的 issue 给出自动归档或手动归档建议。

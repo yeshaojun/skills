@@ -1,0 +1,20 @@
+{
+  "name": "loctek-archive",
+  "version": "0.1.0",
+  "description": "Archive completed Loctek .changes records by issue, branch, or merge report.",
+  "main": "SKILL.md",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "scripts/",
+    "references/"
+  ],
+  "keywords": [
+    "agent-skills",
+    "archive",
+    "git",
+    "semantic-git",
+    "loctek-spec"
+  ]
+}

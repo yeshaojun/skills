@@ -54,6 +54,24 @@ status: draft
 
 TODO: 用自己的话说明这个 issue 要解决什么，以及非目标是什么。
 
+## Decision Log
+
+### 用户关键决策
+
+TODO: 记录用户在会话中确认的范围、取舍、优先级或验收口径。
+
+### 实现思路
+
+TODO: 记录为什么选择当前实现路径。
+
+### 放弃方案
+
+TODO: 记录考虑过但没有采用的方案，以及原因。
+
+### 合并时必须保留
+
+TODO: 记录后续 merge/rebase 时不能丢的行为。
+
 ## Investigation
 
 TODO: 记录阅读了哪些文件、发现了什么。
@@ -114,4 +132,3 @@ function extract(text, regex) {
 function sanitize(value) {
   return value.toLowerCase().replace(/[^a-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "issue";
 }
-

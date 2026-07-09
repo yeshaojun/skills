@@ -32,6 +32,7 @@ git diff --cached --name-status
 .changes/issues/
 .changes/work-reports/
 .changes/test-reports/
+.changes/session-notes/
 .changes/adr/
 ```
 
@@ -42,6 +43,8 @@ git branch --show-current
 ```
 
 如果分支名、work report 或用户上下文能推断 issue，就自动关联。多个 issue 可以一起提交，但 intent 要简单说明为什么属于同一次提交。
+
+只读取活跃目录，不默认读取 `.changes/archive/`。如果需要追溯历史，必须说明原因后再读取 archive。
 
 ### 3. 选择提交范围
 
@@ -109,7 +112,9 @@ node "<skill-dir>/scripts/loctek-commit.mjs" . \
 
 ### 5. 用 AI 补全语义
 
-作为 AI 执行时，提交前先根据 diff、issue、work report、test report 形成下面这些语义，并通过 `--why`、`--what`、`--validation`、`--risks` 传给脚本；不确定时先用 `--prepare`。
+作为 AI 执行时，提交前先根据 diff、issue、work report、test report、session notes 形成下面这些语义，并通过 `--why`、`--what`、`--validation`、`--risks` 传给脚本；不确定时先用 `--prepare`。
+
+当前 intent 的来源是项目内可审计材料：代码 diff、分支名、`.changes` 活跃记录、用户在本轮对话里明确说出的信息，以及 `.changes/session-notes/` 里的关键决策。不要直接读取或依赖 Codex、Claude、Cursor 的私有会话数据库；如果某个关键决策只存在于聊天里，先把它整理进 work report 或 session note。
 
 ```markdown
 ## 为什么改
@@ -135,6 +140,10 @@ node "<skill-dir>/scripts/loctek-commit.mjs" . \
 ## 风险点
 
 说明可能影响的模块和回滚注意事项。
+
+## 会话决策记录
+
+列出相关 session notes 的关键内容。没有匹配记录时写“未发现相关 session notes”，不要编造。
 ```
 
 ### 6. Commit message

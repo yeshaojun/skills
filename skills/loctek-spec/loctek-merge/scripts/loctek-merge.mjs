@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { relative as pathRelative, resolve, join } from "node:path";
 
 const repo = process.argv[2] || process.cwd();
@@ -21,6 +21,7 @@ const currentFiles = base ? git(["diff", "--name-status", `${base}..HEAD`]) : ""
 const targetFiles = base ? git(["diff", "--name-status", `${base}..${target}`]) : "";
 const currentLog = base ? git(["log", "--reverse", "--format=%h %s", `${base}..HEAD`]) : "";
 const targetLog = base ? git(["log", "--reverse", "--format=%h %s", `${base}..${target}`]) : "";
+const activeNotes = collectSessionNotes(current);
 
 const reportDir = join(repo, ".changes", "merge-reports");
 mkdirSync(reportDir, { recursive: true });
@@ -83,6 +84,10 @@ TODO: 从 .changes/intents、commit message、PR、issue 中提取。
 
 TODO: 从 .changes/intents、commit message、PR、issue 中提取。
 
+## 会话决策记录
+
+${formatSessionNotes(activeNotes)}
+
 ## 共同修改文件
 
 TODO: 对比双方 changed files，列出语义冲突候选。
@@ -106,6 +111,22 @@ TODO
 ## 剩余风险
 
 TODO
+
+## 归档建议
+
+合并完成并验证后，如果本报告对应的 Loctek 记录已不再需要作为活跃上下文，先 dry-run：
+
+\`\`\`bash
+node tools/loctek/archive.mjs . --from-merge-report ${relative(reportPath, repo)} --dry-run
+\`\`\`
+
+如果 dry-run 只包含本次已完成工作，再执行：
+
+\`\`\`bash
+node tools/loctek/archive.mjs . --from-merge-report ${relative(reportPath, repo)}
+\`\`\`
+
+如果记录混杂或 issue 未完成，不要自动归档；保留活跃记录并在这里写明原因。
 `;
 
 if (!existsSync(reportPath)) writeFileSync(reportPath, report);
@@ -117,4 +138,48 @@ function sanitize(value) {
 
 function relative(path, base) {
   return pathRelative(resolve(base), resolve(path)) || ".";
+}
+
+function collectSessionNotes(branch) {
+  const root = join(repo, ".changes", "session-notes");
+  if (!existsSync(root)) return [];
+  const safeBranch = sanitize(branch).toLowerCase();
+  return walkFiles(root)
+    .filter((path) => statSync(path).isFile())
+    .filter((path) => !path.endsWith(".gitkeep") && !path.endsWith("_template.md"))
+    .map((path) => ({
+      rel: relative(path, repo),
+      text: safeRead(path),
+      mtime: statSync(path).mtimeMs,
+    }))
+    .filter((note) => {
+      const haystack = `${note.rel}\n${note.text}`.toLowerCase();
+      return haystack.includes(branch.toLowerCase()) || haystack.includes(safeBranch);
+    })
+    .sort((a, b) => b.mtime - a.mtime)
+    .slice(0, 5);
+}
+
+function formatSessionNotes(notes) {
+  if (!notes.length) return "未发现与当前分支匹配的 session notes。";
+  return notes.map((note) => `- ${note.rel}`).join("\n");
+}
+
+function walkFiles(root) {
+  const out = [];
+  for (const entry of readdirSync(root)) {
+    const path = join(root, entry);
+    const stat = statSync(path);
+    if (stat.isDirectory()) out.push(...walkFiles(path));
+    else out.push(path);
+  }
+  return out;
+}
+
+function safeRead(path) {
+  try {
+    return readFileSync(path, "utf8");
+  } catch {
+    return "";
+  }
 }

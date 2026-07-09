@@ -58,17 +58,24 @@ node tools/loctek/install-git-hooks.mjs
   merge-reports/
   test-reports/
   pr/
+  session-notes/
+  archive/
   adr/
   releases/
+.cursor/
+  rules/loctek.mdc
 .github/
   pull_request_template.md
   workflows/loctek-intent-check.yml
+AGENTS.md
+CLAUDE.md
 CODEOWNERS
 .gitmessage
 tools/loctek/
   validate-intent.mjs
   collect-context.mjs
   check-permissions.mjs
+  archive.mjs
   install-git-hooks.mjs
   hooks/commit-msg
 ```
@@ -78,6 +85,9 @@ tools/loctek/
 - `.changes/config.yml` 存在。
 - `.changes/init-report.md` 记录了 created/skipped 文件。
 - `node tools/loctek/check-permissions.mjs` 通过，确认 `.changes` 和 `tools/loctek` 可写。
+- `.changes/session-notes/` 和 `.changes/archive/` 存在。
+- `AGENTS.md`、`CLAUDE.md`、`.cursor/rules/loctek.mdc` 在不存在时被创建，用于让不同 AI 工具沉淀关键决策。
 - PR 模板包含 Why、What Changed、Behavior To Preserve、Validation、Risks。
 - `tools/loctek/validate-intent.mjs` 可以执行。
+- `tools/loctek/archive.mjs` 可以 dry-run。
 - 没有覆盖用户已有文件。

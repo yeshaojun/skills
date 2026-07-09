@@ -106,6 +106,7 @@ skills/
     loctek-commit/
     loctek-merge/
     loctek-test/
+    loctek-archive/
 ```
 
 ## Loctek Spec
@@ -120,6 +121,9 @@ Loctek Spec 是一套中文优先、轻治理的软件工程协作 skills，用 
 | `loctek-commit` | 默认提交当前安全相关改动，同时生成 `.changes/intents` 和 PR 草稿 |
 | `loctek-merge` | 读取双方 intent 后再合并，生成 merge report |
 | `loctek-test` | 根据 issue、intent、merge report 生成测试计划和报告 |
+| `loctek-archive` | 把已完成 issue/branch/merge 的 `.changes` 记录归档到 archive，避免活跃上下文膨胀 |
+
+`loctek-init` 会额外生成 `AGENTS.md`、`CLAUDE.md`、`.cursor/rules/loctek.mdc`，让 Codex、Claude Code、Cursor 等工具把关键决策沉淀到 `.changes/session-notes/`。常规 commit/merge/test 只读取活跃记录，不默认读取 `.changes/archive/`。
 
 参考协议：
 

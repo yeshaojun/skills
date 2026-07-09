@@ -50,7 +50,9 @@ git diff --name-status "$BASE"..main
 ```text
 .changes/issues/
 .changes/intents/
+.changes/work-reports/
 .changes/pr/
+.changes/session-notes/
 .changes/merge-reports/
 ```
 
@@ -154,7 +156,25 @@ status: complete
 ## 已运行测试
 
 ## 剩余风险
+
+## 归档建议
 ```
+
+### 8. 归档已完成记录
+
+合并成功并完成验证后，默认自动尝试归档：先 dry-run，再判断结果是否只包含本次已完成工作的记录。
+
+```bash
+node tools/loctek/archive.mjs . --from-merge-report .changes/merge-reports/<report>.md --dry-run
+```
+
+dry-run 只包含本次已完成工作的记录，且归档脚本没有提示 issue 未完成时，执行正式归档：
+
+```bash
+node tools/loctek/archive.mjs . --from-merge-report .changes/merge-reports/<report>.md
+```
+
+如果记录混杂、issue 未完成、测试未确认或权限异常，不要自动归档；在 merge report 的“归档建议”里写明原因和手动命令。归档失败不阻塞合并本身。
 
 ## 完成标准
 
@@ -163,3 +183,4 @@ status: complete
 - 共同修改文件已检查。
 - merge report 已生成。
 - 相关测试已运行，或明确说明没运行及原因。
+- 已自动归档明确完成的记录，或写明为什么需要用户手动归档。

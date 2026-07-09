@@ -23,6 +23,8 @@ Default to lightweight governance:
   merge-reports/
   test-reports/
   pr/
+  session-notes/
+  archive/
   adr/
   releases/
 ```
@@ -128,6 +130,26 @@ status: draft
 ## Follow-ups
 ```
 
+### Session Note
+
+```markdown
+---
+type: session-note
+branch: feature/example
+issues:
+  - ISSUE-001
+created_at: 2026-07-07T00:00:00Z
+---
+
+# Session Note
+
+## 用户关键决策
+## 实现思路
+## 放弃方案
+## 合并时必须保留
+## 关联文件
+```
+
 ### Merge Report
 
 ```markdown
@@ -148,6 +170,7 @@ status: draft
 ## 冲突解决记录
 ## 合并后验证清单
 ## 剩余风险
+## 归档建议
 ```
 
 ### Test Report
@@ -178,6 +201,11 @@ status: draft
 - Issue skills must classify each issue as `issue_kind: feature` or `issue_kind: bug` before splitting work.
 - Bug issues must stay focused on symptoms, reproduction, hypotheses, fix boundary, and regression tests. Do not expand them into broad module optimization unless the user explicitly asks.
 - Work skills should infer the related issue when confidence is high; ask only when multiple plausible issues exist.
+- Project-level AI instructions should record important user decisions into `.changes/session-notes/` when no work report is being updated. Do not read raw AI tool chat databases, and do not store secrets or full transcripts.
+- Commit skills should read relevant active session notes and include their key decisions in intent. Treat notes as hints to verify against code.
 - Commit skills default to committing safe related changes. They must use explicit `git add -- <files>`, never `git add .`, and must not push. Multiple issues are allowed when the intent explains why they belong together.
-- Merge skills must read relevant issue and intent records before resolving conflicts.
+- Merge skills must read relevant issue, intent, work report, PR, and session note records before resolving conflicts.
 - Test skills should run focused checks. High-risk changes need stronger validation; ordinary changes may record a clear "not run" reason.
+- Active directories are current context. `.changes/archive/` is historical context and should not be read by default.
+- Archive records automatically only when the issue/branch match is high confidence and the work is complete. If uncertain, leave records active and write an explicit manual archive command.
+- Archive failures must not block a successful merge or test pass; record the reason and the command to retry.

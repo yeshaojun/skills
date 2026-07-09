@@ -56,20 +56,36 @@ function template(name) {
 }
 
 ensureDir(join(repo, ".changes"));
-for (const dir of ["issues", "work-reports", "intents", "merge-reports", "test-reports", "pr", "adr", "releases"]) {
+for (const dir of [
+  "issues",
+  "work-reports",
+  "intents",
+  "merge-reports",
+  "test-reports",
+  "pr",
+  "session-notes",
+  "archive",
+  "adr",
+  "releases",
+]) {
   ensureDir(join(repo, ".changes", dir));
   writeNew(join(".changes", dir, ".gitkeep"), "");
 }
 
 writeNew(".changes/config.yml", template("changes-config.yml"));
 writeNew(".changes/README.md", template("changes-readme.md"));
+writeNew(".changes/session-notes/_template.md", template("session-note-template.md"));
 writeNew(".gitmessage", template("gitmessage.txt"));
 writeNew(".github/pull_request_template.md", template("pull_request_template.md"));
 writeNew(".github/workflows/loctek-intent-check.yml", template("loctek-intent-check.yml"));
+writeNew("AGENTS.md", template("AGENTS.md"));
+writeNew("CLAUDE.md", template("CLAUDE.md"));
+writeNew(".cursor/rules/loctek.mdc", template("cursor-loctek.mdc"));
 writeNew("CODEOWNERS", template("CODEOWNERS"));
 writeNew("tools/loctek/validate-intent.mjs", template("validate-intent.mjs"));
 writeNew("tools/loctek/collect-context.mjs", template("collect-context.mjs"));
 writeNew("tools/loctek/check-permissions.mjs", template("check-permissions.mjs"));
+writeNew("tools/loctek/archive.mjs", template("archive.mjs"));
 writeNew("tools/loctek/install-git-hooks.mjs", template("install-git-hooks.mjs"));
 writeNew("tools/loctek/hooks/commit-msg", template("commit-msg-hook"));
 
@@ -109,6 +125,7 @@ ${permissionNotes.length ? permissionNotes.map((item) => `- ${item}`).join("\n")
 - Review .changes/config.yml.
 - Run: node tools/loctek/check-permissions.mjs
 - Run: node tools/loctek/install-git-hooks.mjs
+- Ask AI tools to follow AGENTS.md, CLAUDE.md, or .cursor/rules/loctek.mdc and record important decisions in .changes/session-notes/.
 - Configure branch protection so CI must pass before merging.
 - Ask an agent to use $loctek-issue for the first feature breakdown.
 `;
