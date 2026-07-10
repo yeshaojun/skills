@@ -24,20 +24,34 @@ function checkPermissions(paths) {
   for (const rel of paths) {
     const path = join(repo, rel);
     if (!existsSync(path)) continue;
-    const stat = statSync(path);
-    if (!stat.isDirectory()) continue;
-    const owner = ownerText(stat);
-    if (isRootOwned(stat) && !isRoot()) issues.push(`${rel} is owned by root (${owner}).`);
-    try {
-      accessSync(path, constants.W_OK);
+    for (const item of walk(path)) checkOnePath(item, issues);
+  }
+  return [...new Set(issues)];
+}
+
+function walk(path) {
+  const out = [path];
+  const stat = statSync(path);
+  if (!stat.isDirectory()) return out;
+  for (const entry of readdirSync(path)) out.push(...walk(join(path, entry)));
+  return out;
+}
+
+function checkOnePath(path, issues) {
+  const stat = statSync(path);
+  const rel = path.startsWith(`${repo}/`) ? path.slice(repo.length + 1) : path;
+  const owner = ownerText(stat);
+  if (isRootOwned(stat) && !isRoot()) issues.push(`${rel} is owned by root (${owner}).`);
+  try {
+    accessSync(path, constants.W_OK);
+    if (stat.isDirectory()) {
       const probe = join(path, `.loctek-permission-check-${process.pid}`);
       writeFileSync(probe, "ok\n");
       unlinkSync(probe);
-    } catch {
-      issues.push(`${rel} is not writable by current user (${owner}).`);
     }
+  } catch {
+    issues.push(`${rel} is not writable by current user (${owner}).`);
   }
-  return issues;
 }
 
 function fixOwnership(paths) {

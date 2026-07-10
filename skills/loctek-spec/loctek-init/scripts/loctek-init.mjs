@@ -1,5 +1,17 @@
 #!/usr/bin/env node
-import { accessSync, constants, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync, chownSync } from "node:fs";
+import {
+  accessSync,
+  appendFileSync,
+  chownSync,
+  constants,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -51,6 +63,23 @@ function writeNew(rel, content) {
   created.push(rel);
 }
 
+function writeNewOrAppend(rel, content, marker) {
+  const path = join(repo, rel);
+  ensureDir(dirname(path));
+  if (!existsSync(path)) {
+    writeFileSync(path, content);
+    created.push(rel);
+    return;
+  }
+  const current = readFileSync(path, "utf8");
+  if (current.includes(marker)) {
+    skipped.push(rel);
+    return;
+  }
+  appendFileSync(path, `\n\n---\n\n${content.trim()}\n`);
+  created.push(`${rel} (appended Loctek rules)`);
+}
+
 function template(name) {
   return readFileSync(join(__dirname, "..", "assets", name), "utf8");
 }
@@ -78,8 +107,8 @@ writeNew(".changes/session-notes/_template.md", template("session-note-template.
 writeNew(".gitmessage", template("gitmessage.txt"));
 writeNew(".github/pull_request_template.md", template("pull_request_template.md"));
 writeNew(".github/workflows/loctek-intent-check.yml", template("loctek-intent-check.yml"));
-writeNew("AGENTS.md", template("AGENTS.md"));
-writeNew("CLAUDE.md", template("CLAUDE.md"));
+writeNewOrAppend("AGENTS.md", template("AGENTS.md"), "Loctek Spec");
+writeNewOrAppend("CLAUDE.md", template("CLAUDE.md"), "Loctek Spec");
 writeNew(".cursor/rules/loctek.mdc", template("cursor-loctek.mdc"));
 writeNew("CODEOWNERS", template("CODEOWNERS"));
 writeNew("tools/loctek/validate-intent.mjs", template("validate-intent.mjs"));
@@ -139,17 +168,34 @@ function checkPermissions(relPaths) {
   for (const rel of relPaths) {
     const path = join(repo, rel);
     if (!existsSync(path)) continue;
-    const stat = statSync(path);
-    if (!stat.isDirectory()) continue;
-    const owner = ownerText(stat);
-    if (isRootOwned(stat) && !isRoot()) issues.push(`${rel} is owned by root (${owner}).`);
-    try {
-      accessSync(path, constants.W_OK);
-    } catch {
-      issues.push(`${rel} is not writable by current user (${owner}).`);
-    }
+    for (const item of walk(path)) checkOnePath(item, issues);
   }
-  return issues;
+  return [...new Set(issues)];
+}
+
+function walk(path) {
+  const out = [path];
+  const stat = statSync(path);
+  if (!stat.isDirectory()) return out;
+  for (const entry of readdirSync(path)) out.push(...walk(join(path, entry)));
+  return out;
+}
+
+function checkOnePath(path, issues) {
+  const stat = statSync(path);
+  const rel = path.startsWith(`${repo}/`) ? path.slice(repo.length + 1) : path;
+  const owner = ownerText(stat);
+  if (isRootOwned(stat) && !isRoot()) issues.push(`${rel} is owned by root (${owner}).`);
+  try {
+    accessSync(path, constants.W_OK);
+    if (stat.isDirectory()) {
+      const probe = join(path, `.loctek-permission-check-${process.pid}`);
+      writeFileSync(probe, "ok\n");
+      unlinkSync(probe);
+    }
+  } catch {
+    issues.push(`${rel} is not writable by current user (${owner}).`);
+  }
 }
 
 function fixOwnership(relPaths) {
