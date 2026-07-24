@@ -19,6 +19,15 @@ Do not keep one shared mutable file for all changes. Prefer one small file per i
 
 Normal AI work should read active directories only. Do not read `archive/` unless tracing historical decisions.
 
+## OpenSpec Compatibility
+
+If this project also uses OpenSpec, treat it as a sibling workflow:
+
+- Read `openspec/specs/` as the behavior baseline.
+- Read active `openspec/changes/<change>/proposal.md`, `design.md`, `tasks.md`, and `specs/` as supplemental context.
+- Do not read `openspec/changes/archive/` by default.
+- Do not copy OpenSpec content into `.changes/`; keep the two systems separate.
+
 ## Session Notes
 
 When an AI tool is not actively updating a work report, record important user decisions in:

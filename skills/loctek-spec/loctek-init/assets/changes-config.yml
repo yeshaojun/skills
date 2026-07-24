@@ -56,6 +56,16 @@ archive:
   auto_after_merge_when_safe: true
   auto_after_test_when_issue_complete: false
   dry_run_first: true
+interop:
+  openspec:
+    enabled: true
+    spec_roots:
+      - openspec/specs
+    change_roots:
+      - openspec/changes
+    archive_roots:
+      - openspec/changes/archive
+    default_read: supplemental
 commit:
   default_mode: commit
   allow_prepare: true

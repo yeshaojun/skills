@@ -12,6 +12,16 @@ Default to lightweight governance:
 - Block only dangerous commits, permission problems, unresolved conflicts, or merge decisions that could drop behavior.
 - Keep merge strict: read intents/issues/work reports before resolving conflicts.
 
+## OpenSpec Compatibility
+
+If the project also uses OpenSpec, treat it as a parallel source of truth rather than a competing workflow:
+
+- Read `openspec/specs/` as the system behavior baseline.
+- Read active `openspec/changes/<change>/proposal.md`, `design.md`, `tasks.md`, and `specs/` as additional context for the current change.
+- Do not read `openspec/changes/archive/` by default.
+- Do not mirror or overwrite OpenSpec artifacts when working with Loctek records.
+- Use OpenSpec to understand product/spec intent; use Loctek `.changes` to preserve developer intent across issue, work, commit, test, and merge.
+
 ## Directory
 
 ```text
@@ -209,3 +219,4 @@ status: draft
 - Active directories are current context. `.changes/archive/` is historical context and should not be read by default.
 - Archive records automatically only when the issue/branch match is high confidence and the work is complete. If uncertain, leave records active and write an explicit manual archive command.
 - Archive failures must not block a successful merge or test pass; record the reason and the command to retry.
+- When OpenSpec is present, its active change folders and main specs should be read alongside active Loctek records. Keep the two systems separate: OpenSpec for spec evolution, Loctek for execution intent and merge safety.

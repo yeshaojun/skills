@@ -13,3 +13,10 @@ This project uses `.changes` records to preserve intent across issue planning, w
 - Keep session notes short. Do not store secrets or full chat transcripts.
 - Before resolving merge conflicts, preserve both sides' intent and document the decision in a merge report.
 - After completed work, dry-run archive with `node tools/loctek/archive.mjs . --issue ISSUE-001 --dry-run` or `--branch <branch> --dry-run`; archive only when the match is clearly safe.
+
+## OpenSpec Compatibility
+
+- If the repository also has `openspec/`, read `openspec/specs/` as the current behavior baseline.
+- Read active `openspec/changes/<change>/proposal.md`, `design.md`, `tasks.md`, and `specs/` when the current task is related to a proposal or in-flight spec change.
+- Do not read `openspec/changes/archive/` by default.
+- Keep OpenSpec and Loctek separate: do not copy OpenSpec artifacts into `.changes/`.

@@ -32,6 +32,13 @@ description: 中文版 issue 生成 skill。用于把需求、PRD、计划、Ope
 .changes/adr/
 ```
 
+如果项目同时使用 OpenSpec，还要读取：
+
+```text
+openspec/specs/
+openspec/changes/<active-change>/
+```
+
 Bug Mode 额外收集：
 
 - 观察到的现象和期望行为。

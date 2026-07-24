@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import { relative as pathRelative, resolve, join } from "node:path";
+import { basename, relative as pathRelative, resolve, join } from "node:path";
 
 const repo = process.argv[2] || process.cwd();
 const target = process.argv[3] || "main";
@@ -22,6 +22,7 @@ const targetFiles = base ? git(["diff", "--name-status", `${base}..${target}`]) 
 const currentLog = base ? git(["log", "--reverse", "--format=%h %s", `${base}..HEAD`]) : "";
 const targetLog = base ? git(["log", "--reverse", "--format=%h %s", `${base}..${target}`]) : "";
 const activeNotes = collectSessionNotes(current);
+const openSpecContext = collectOpenSpecContext(current, target);
 
 const reportDir = join(repo, ".changes", "merge-reports");
 mkdirSync(reportDir, { recursive: true });
@@ -87,6 +88,10 @@ TODO: 从 .changes/intents、commit message、PR、issue 中提取。
 ## 会话决策记录
 
 ${formatSessionNotes(activeNotes)}
+
+## OpenSpec 兼容上下文
+
+${formatOpenSpecContext(openSpecContext)}
 
 ## 共同修改文件
 
@@ -165,6 +170,76 @@ function formatSessionNotes(notes) {
   return notes.map((note) => `- ${note.rel}`).join("\n");
 }
 
+function collectOpenSpecContext(currentBranch, targetBranch) {
+  const root = join(repo, "openspec");
+  if (!existsSync(root)) return [];
+
+  const hints = [
+    sanitize(currentBranch).toLowerCase(),
+    sanitize(targetBranch).toLowerCase(),
+    currentBranch.toLowerCase(),
+    targetBranch.toLowerCase(),
+  ].filter(Boolean);
+  const files = [];
+
+  for (const changeDir of listDirectories(join(root, "changes"))) {
+    const changeFiles = [
+      "proposal.md",
+      "design.md",
+      "tasks.md",
+      ".openspec.yaml",
+      "README.md",
+    ]
+      .map((name) => join(changeDir, name))
+      .filter((path) => existsSync(path));
+
+    for (const specDir of listDirectories(join(changeDir, "specs"))) {
+      changeFiles.push(...walkFiles(specDir).filter((path) => basename(path) === "spec.md"));
+    }
+
+    const haystack = `${basename(changeDir).toLowerCase()}\n${changeFiles.map((path) => safeRead(path)).join("\n")}`.toLowerCase();
+    if (hints.some((hint) => haystack.includes(hint))) files.push(...changeFiles);
+  }
+
+  for (const specDir of listDirectories(join(root, "specs"))) {
+    const specFiles = walkFiles(specDir).filter((path) => basename(path) === "spec.md");
+    const haystack = `${basename(specDir).toLowerCase()}\n${specFiles.map((path) => safeRead(path)).join("\n")}`.toLowerCase();
+    if (hints.some((hint) => haystack.includes(hint))) files.push(...specFiles);
+  }
+
+  return unique(files)
+    .map((path) => ({
+      rel: relative(path, repo),
+      text: safeRead(path),
+      mtime: statSync(path).mtimeMs,
+    }))
+    .filter((item) => item.text.trim())
+    .sort((a, b) => b.mtime - a.mtime)
+    .slice(0, 6);
+}
+
+function formatOpenSpecContext(notes) {
+  if (!notes.length) return "未发现与当前分支匹配的 OpenSpec 上下文。";
+  return notes.map((note) => `- ${note.rel}`).join("\n");
+}
+
+function listDirectories(root) {
+  if (!existsSync(root)) return [];
+  return readdirSync(root)
+    .map((entry) => join(root, entry))
+    .filter((path) => statSync(path).isDirectory())
+    .filter((path) => !basename(path).startsWith("."))
+    .filter((path) => basename(path) !== "archive");
+}
+
+function safeRead(path) {
+  try {
+    return readFileSync(path, "utf8");
+  } catch {
+    return "";
+  }
+}
+
 function walkFiles(root) {
   const out = [];
   for (const entry of readdirSync(root)) {
@@ -174,12 +249,4 @@ function walkFiles(root) {
     else out.push(path);
   }
   return out;
-}
-
-function safeRead(path) {
-  try {
-    return readFileSync(path, "utf8");
-  } catch {
-    return "";
-  }
 }

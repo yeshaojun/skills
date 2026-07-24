@@ -20,6 +20,13 @@ description: 意图感知的测试计划和执行 skill。用于用户要求根�
 .changes/config.yml
 ```
 
+如果项目存在 OpenSpec，再读取：
+
+```text
+openspec/specs/
+openspec/changes/<active-change>/
+```
+
 并检查：
 
 ```bash

@@ -56,6 +56,13 @@ git diff --name-status "$BASE"..main
 .changes/merge-reports/
 ```
 
+如果项目存在 OpenSpec，也读取：
+
+```text
+openspec/specs/
+openspec/changes/<active-change>/
+```
+
 再读取：
 
 - commit message

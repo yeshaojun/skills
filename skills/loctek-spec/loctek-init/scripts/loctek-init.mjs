@@ -132,6 +132,8 @@ if (permissionIssues.length) {
   permissionNotes.push("Permission check passed for .changes and tools/loctek.");
 }
 
+const openSpecNotes = openSpecReport();
+
 const report = `# Loctek Init Report
 
 Created at: ${now}
@@ -148,6 +150,10 @@ ${skipped.length ? skipped.map((item) => `- ${item}`).join("\n") : "- None"}
 ## Permission Check
 
 ${permissionNotes.length ? permissionNotes.map((item) => `- ${item}`).join("\n") : "- None"}
+
+## OpenSpec Compatibility
+
+${openSpecNotes.map((item) => `- ${item}`).join("\n")}
 
 ## Next Steps
 
@@ -244,4 +250,14 @@ function repairCommand(relPaths) {
   const existing = relPaths.filter((rel) => existsSync(join(repo, rel)));
   const targets = existing.length ? existing.join(" ") : relPaths.join(" ");
   return `sudo chown -R "$(id -u):$(id -g)" ${targets}`;
+}
+
+function openSpecReport() {
+  const root = join(repo, "openspec");
+  if (!existsSync(root)) return ["No openspec/ directory detected."];
+  const notes = ["Detected openspec/ directory."];
+  if (existsSync(join(root, "specs"))) notes.push("Loctek will read openspec/specs/ as supplemental behavior baseline.");
+  if (existsSync(join(root, "changes"))) notes.push("Loctek will read active openspec/changes/ as supplemental proposal/design/tasks context.");
+  notes.push("Loctek will not overwrite or archive OpenSpec artifacts.");
+  return notes;
 }

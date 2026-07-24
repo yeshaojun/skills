@@ -38,6 +38,13 @@ description: 按 Loctek issue 执行开发、排查 bug、重构或验证的工�
 .changes/test-reports/
 ```
 
+如果项目存在 OpenSpec，还要读取：
+
+```text
+openspec/specs/
+openspec/changes/<active-change>/
+```
+
 只读取与当前 issue 相关的上下文，避免把无关历史带入实现。
 
 ### 3. 建立工作记录

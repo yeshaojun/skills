@@ -52,12 +52,16 @@ const workStat = git(["diff", "--cached", "--stat"]);
 const workDiff = git(["diff", "--cached", "--", "."]);
 if (!workNameStatus) fail("No staged diff found after selecting files.");
 const sessionNotes = collectSessionNotes({ branch, issues: options.issues, selected });
+const openSpecContext = collectOpenSpecContext({ branch, issues: options.issues, selected });
 
 const intentRel = relative(intentPath, repo);
 const prRel = relative(prPath, repo);
 const highRisk = selected.filter(isHighRiskFile);
 
-writeFileSync(intentPath, buildIntent({ branch, workNameStatus, workStat, workDiff, highRisk, blocked, sessionNotes }));
+writeFileSync(
+  intentPath,
+  buildIntent({ branch, workNameStatus, workStat, workDiff, highRisk, blocked, sessionNotes, openSpecContext }),
+);
 writeFileSync(prPath, buildPr({ workNameStatus, highRisk, intentRel }));
 
 git(["add", "--", intentRel, prRel]);
@@ -171,7 +175,7 @@ function selectFiles(files, opts) {
   });
 }
 
-function buildIntent({ branch, workNameStatus, workStat, workDiff, highRisk, blocked, sessionNotes }) {
+function buildIntent({ branch, workNameStatus, workStat, workDiff, highRisk, blocked, sessionNotes, openSpecContext }) {
   return `${intentFrontmatter(branch)}
 
 # Change Intent
@@ -213,6 +217,10 @@ ${options.issues.length > 1 ? options.multiIssueReason || "TODO: 说明为什么
 ## 会话决策记录
 
 ${formatSessionNotes(sessionNotes)}
+
+## OpenSpec 兼容上下文
+
+${formatOpenSpecContext(openSpecContext)}
 
 ## Diff Stat
 
@@ -507,6 +515,70 @@ ${excerpt}
     .join("\n\n");
 }
 
+function collectOpenSpecContext({ branch, issues, selected }) {
+  const root = join(repo, "openspec");
+  if (!existsSync(root)) return [];
+
+  const branchHint = sanitize(branch).toLowerCase();
+  const issueHints = issues.map((issue) => issue.toLowerCase());
+  const selectedHints = selected.map((file) => file.toLowerCase());
+  const hints = [branchHint, ...issueHints, ...selectedHints].filter(Boolean);
+  const files = [];
+
+  for (const changeDir of listDirectories(join(root, "changes"))) {
+    const changeName = basename(changeDir).toLowerCase();
+    const changeFiles = [
+      "proposal.md",
+      "design.md",
+      "tasks.md",
+      ".openspec.yaml",
+      "README.md",
+    ]
+      .map((name) => join(changeDir, name))
+      .filter((path) => existsSync(path));
+
+    const specDirs = listDirectories(join(changeDir, "specs"));
+    for (const specDir of specDirs) {
+      const specFiles = walkFiles(specDir).filter((path) => basename(path) === "spec.md");
+      changeFiles.push(...specFiles);
+    }
+
+    const haystack = `${changeName}\n${changeFiles.map((path) => safeRead(path)).join("\n")}`.toLowerCase();
+    if (hints.some((hint) => haystack.includes(hint))) files.push(...changeFiles);
+  }
+
+  for (const specDir of listDirectories(join(root, "specs"))) {
+    const specFiles = walkFiles(specDir).filter((path) => basename(path) === "spec.md");
+    const haystack = `${basename(specDir).toLowerCase()}\n${specFiles.map((path) => safeRead(path)).join("\n")}`.toLowerCase();
+    if (hints.some((hint) => haystack.includes(hint))) files.push(...specFiles);
+  }
+
+  return unique(files)
+    .map((path) => ({
+      path,
+      rel: relative(path, repo),
+      text: safeRead(path),
+      mtime: statSync(path).mtimeMs,
+    }))
+    .filter((item) => item.text.trim())
+    .sort((a, b) => b.mtime - a.mtime)
+    .slice(0, 6);
+}
+
+function formatOpenSpecContext(notes) {
+  if (!notes.length) return "未发现与当前分支、issue 或改动文件匹配的 OpenSpec 上下文。";
+  return notes
+    .map((note) => {
+      const excerpt = truncate(note.text.replace(/\r?\n{3,}/g, "\n\n").trim(), 3000);
+      return `### ${note.rel}
+
+\`\`\`markdown
+${excerpt}
+\`\`\``;
+    })
+    .join("\n\n");
+}
+
 function walkFiles(root) {
   const out = [];
   for (const entry of readdirSync(root)) {
@@ -516,6 +588,15 @@ function walkFiles(root) {
     else out.push(path);
   }
   return out;
+}
+
+function listDirectories(root) {
+  if (!existsSync(root)) return [];
+  return readdirSync(root)
+    .map((entry) => join(root, entry))
+    .filter((path) => statSync(path).isDirectory())
+    .filter((path) => !basename(path).startsWith("."))
+    .filter((path) => basename(path) !== "archive");
 }
 
 function safeRead(path) {

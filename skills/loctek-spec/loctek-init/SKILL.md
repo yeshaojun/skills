@@ -46,6 +46,7 @@ node tools/loctek/install-git-hooks.mjs
 - 不要用 `sudo` 初始化普通用户开发的项目；否则 `.changes` 可能变成 root-owned，后续 commit 无法写 intent/PR 记录。
 - 如果已有 GitHub workflow、PR 模板、CODEOWNERS 或 hook，生成报告并说明如何合并。
 - 初始化后提醒配置分支保护：PR 必须通过 CI，不能直接 push 到主干。
+- 如果项目已经有 OpenSpec，保持 Loctek 与 OpenSpec 并存：OpenSpec 负责 specs/changes，Loctek 负责 `.changes` 记录与执行过程，不互相覆盖。
 
 ## 生成内容
 
@@ -87,6 +88,7 @@ tools/loctek/
 - `node tools/loctek/check-permissions.mjs` 通过，确认 `.changes` 和 `tools/loctek` 可写。
 - `.changes/session-notes/` 和 `.changes/archive/` 存在。
 - `AGENTS.md`、`CLAUDE.md`、`.cursor/rules/loctek.mdc` 在不存在时被创建，用于让不同 AI 工具沉淀关键决策。
+- 如果项目存在 `openspec/`，报告里要提示其 `specs/` 与活跃 `changes/` 会作为补充上下文读取，但不会被 Loctek 覆盖。
 - PR 模板包含 Why、What Changed、Behavior To Preserve、Validation、Risks。
 - `tools/loctek/validate-intent.mjs` 可以执行。
 - `tools/loctek/archive.mjs` 可以 dry-run。
