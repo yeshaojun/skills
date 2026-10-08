@@ -96,6 +96,11 @@ for (const dir of [
   "archive",
   "adr",
   "releases",
+  "qa/req-analysis",
+  "qa/blackbox",
+  "qa/whitebox",
+  "qa/exec",
+  "qa/knowledge",
 ]) {
   ensureDir(join(repo, ".changes", dir));
   writeNew(join(".changes", dir, ".gitkeep"), "");

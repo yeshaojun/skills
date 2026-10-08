@@ -1,0 +1,19 @@
+{
+  "name": "loctek-test-run",
+  "version": "0.1.0",
+  "description": "High-fidelity black-box case execution: parse cases to JSON, generate Playwright specs with 1:1 mirror checking, attribution-based self-healing, and bug reflux to .changes issues.",
+  "main": "SKILL.md",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "scripts/"
+  ],
+  "keywords": [
+    "agent-skills",
+    "playwright",
+    "e2e",
+    "automation",
+    "functional-testing"
+  ]
+}

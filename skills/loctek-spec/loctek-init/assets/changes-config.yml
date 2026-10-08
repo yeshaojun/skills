@@ -113,6 +113,17 @@ test:
       - pytest
     go:
       - go test ./...
+qa:
+  directories:
+    req_analysis: .changes/qa/req-analysis
+    blackbox: .changes/qa/blackbox
+    whitebox: .changes/qa/whitebox
+    exec: .changes/qa/exec
+    knowledge: .changes/qa/knowledge
+  artifacts_require_issue_or_branch: true
+  case_coverage_min_percent: 95
+  bug_reflux_requires_user_confirmation: true
+  knowledge_never_archived: true
 risk_files:
   - package.json
   - pnpm-lock.yaml

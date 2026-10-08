@@ -1,0 +1,20 @@
+{
+  "name": "loctek-test-case",
+  "version": "0.1.0",
+  "description": "Black-box functional test case design with REQ-level bidirectional traceability, six-type commitment, atomic cases, and a deterministic validation script.",
+  "main": "SKILL.md",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "scripts/",
+    "references/"
+  ],
+  "keywords": [
+    "agent-skills",
+    "blackbox",
+    "test-cases",
+    "traceability",
+    "functional-testing"
+  ]
+}

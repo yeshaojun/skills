@@ -32,6 +32,12 @@ If the project also uses OpenSpec, treat it as a parallel source of truth rather
   intents/
   merge-reports/
   test-reports/
+  qa/
+    req-analysis/
+    blackbox/
+    whitebox/
+    exec/
+    knowledge/          # long-lived project QA knowledge; never archived with issues
   pr/
   session-notes/
   archive/
@@ -201,6 +207,33 @@ status: draft
 ## 手工验证
 ## 回归风险
 ```
+
+### QA Artifacts (test design suite)
+
+Skills `loctek-test-req`, `loctek-test-case`, `loctek-test-review`, and `loctek-test-run` write QA artifacts under `.changes/qa/`. All of them share one frontmatter rule: `branch` and `issue` (or `null`) are required so archive can pick them up with their issue.
+
+| Artifact | type | Directory | Producer |
+| :--- | :--- | :--- | :--- |
+| Requirement test analysis | `qa-req-analysis` | `qa/req-analysis/` | loctek-test-req |
+| Black-box case set | `qa-case-set` | `qa/blackbox/` | loctek-test-case |
+| White-box walkthrough report | `qa-review-report` | `qa/whitebox/` | loctek-test-review |
+| Case execution report | `qa-exec-report` | `qa/exec/` | loctek-test-run |
+
+```markdown
+---
+type: qa-case-set
+branch: feature/example
+issue: ISSUE-001
+status: complete
+---
+```
+
+QA-specific rules:
+
+- `qa/req-analysis/` REQ baselines are the shared denominator for case coverage and the consistency baseline for white-box review. Confirm with the user before downstream skills consume them.
+- `qa/knowledge/` (or `docs/qa/`) holds long-lived project knowledge such as historical bug lists. It is not per-issue evidence: never archive it with an issue, never overwrite it during archive.
+- High-risk findings from review or execution must be offered for bug reflux: generate a `.changes/issues/` record with `issue_kind: bug` (loctek-issue bug template) after user confirmation. Record the generated issue id in the QA artifact.
+- Case sets must pass their deterministic validation script before delivery; execution must pass mirror check before running.
 
 ## Rules
 

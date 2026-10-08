@@ -1,0 +1,20 @@
+{
+  "name": "loctek-test-review",
+  "version": "0.1.0",
+  "description": "Intent-aware white-box code walkthrough with incremental diff analysis, six-category checks, and quantified pass/fail reports for Loctek changes.",
+  "main": "SKILL.md",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "scripts/",
+    "references/"
+  ],
+  "keywords": [
+    "agent-skills",
+    "whitebox",
+    "code-review",
+    "regression",
+    "semantic-git"
+  ]
+}

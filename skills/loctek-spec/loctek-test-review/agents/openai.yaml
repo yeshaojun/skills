@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loctek Test Review"
+  short_description: "White-box walkthrough of incremental changes"
+  default_prompt: "Use $loctek-test-review to walk through the incremental changes of this branch."

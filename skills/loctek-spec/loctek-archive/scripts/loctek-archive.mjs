@@ -103,7 +103,21 @@ function buildCriteria(opts) {
 }
 
 function collectCandidates(criteria) {
-  const dirs = ["issues", "work-reports", "intents", "test-reports", "merge-reports", "pr", "session-notes"];
+  // qa/knowledge is intentionally excluded: long-lived project knowledge is
+  // never archived with an issue (see shared/protocol.md QA rules).
+  const dirs = [
+    "issues",
+    "work-reports",
+    "intents",
+    "test-reports",
+    "merge-reports",
+    "pr",
+    "session-notes",
+    "qa/req-analysis",
+    "qa/blackbox",
+    "qa/whitebox",
+    "qa/exec",
+  ];
   const files = [];
   for (const dir of dirs) {
     const root = join(repo, ".changes", dir);

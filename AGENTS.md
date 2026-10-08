@@ -7,13 +7,15 @@ OpenCode Skills Collection - 为 OpenCode/Claude 提供专业化能力扩展的�
 ```
 skills/
 ├── skills/                          # 所有 skills（每个独立自包含）
-│   ├── stock-investment-analysis/   # 股票投资分析 skill
-│   │   ├── SKILL.md                 # Skill 定义（核心入口）
-│   │   ├── scripts/                 # 可执行脚本
-│   │   └── references/              # 参考文档（按需加载）
-│   └── andy-invest-writer/          # 投资写作 skill
-│       ├── SKILL.md                 # Skill 定义（核心入口）
-│       └── references/              # 参考文档（按需加载）
+│   ├── investment/                  # 投资领域 skills
+│   │   ├── invest-writer/           # 投资写作 skill
+│   │   │   ├── SKILL.md             # Skill 定义（核心入口）
+│   │   │   └── references/          # 参考文档（按需加载）
+│   │   └── charlie-munger-perspective/
+│   └── loctek-spec/                 # Loctek 工程治理 skills（共享 .changes 协议）
+│       ├── shared/                  # 协议文档（protocol.md / upstream.md）
+│       ├── loctek-init/ … loctek-archive/    # 开发主链：init/issue/work/commit/merge/test/archive
+│       └── loctek-test-req|case|review|run/  # 测试设计子家族：需求分析/黑盒用例/白盒走查/自动执行
 ├── package.json                     # npm workspace 配置
 └── requirements.txt                 # Python 依赖
 ```
@@ -45,6 +47,7 @@ npm run stock-analysis -- analyze 600519
 1. **渐进式加载** - SKILL.md 保持精简（<500行），详细内容放 references/ 按需加载
 2. **脚本优先** - 可重复执行的任务封装为脚本，减少上下文占用
 3. **模块化** - 每个 Skill 独立自包含，可单独安装使用
+4. **门控脚本化** - "必须校验"的质量门（用例一致性、镜像校验、覆盖率）用确定性脚本把关，不依赖 AI 自觉
 
 ## 添加新 Skill
 

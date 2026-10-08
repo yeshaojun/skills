@@ -106,6 +106,10 @@ skills/
     loctek-commit/
     loctek-merge/
     loctek-test/
+    loctek-test-req/
+    loctek-test-case/
+    loctek-test-review/
+    loctek-test-run/
     loctek-archive/
 ```
 
@@ -120,8 +124,14 @@ Loctek Spec 是一套中文优先、轻治理的软件工程协作 skills，用 
 | `loctek-work` | 根据 issue 执行开发、排查 bug、重构或验证，并生成 work report |
 | `loctek-commit` | 默认提交当前安全相关改动，同时生成 `.changes/intents` 和 PR 草稿 |
 | `loctek-merge` | 读取双方 intent 后再合并，生成 merge report |
-| `loctek-test` | 根据 issue、intent、merge report 生成测试计划和报告 |
+| `loctek-test` | 根据 issue、intent、merge report 生成测试计划并执行自动化测试命令，写 test report |
+| `loctek-test-req` | 测试视角的需求分析：四趟分层提取，产出带 REQ 编号的测试基线 |
+| `loctek-test-case` | 黑盒用例设计：REQ 双向追溯（覆盖≥95%）、6 类测试类型承诺、原子化用例 + 校验脚本 |
+| `loctek-test-review` | 白盒代码走查：增量 diff 分析 + 6 大类检查，量化 Pass/Fail 结论，问题回流 bug issue |
+| `loctek-test-run` | 用例自动化执行：Playwright + 1:1 镜像校验 + 归因自愈，功能缺陷回流 bug issue |
 | `loctek-archive` | 把已完成 issue/branch/merge 的 `.changes` 记录归档到 archive，避免活跃上下文膨胀 |
+
+测试设计子家族与 `loctek-test` 的分工：`loctek-test-req/-case` 解决"测什么、怎么设计用例"，`loctek-test-review` 解决"代码怎么走查"，`loctek-test-run` 解决"用例怎么自动跑"，`loctek-test` 负责执行项目自身的自动化命令并写统一 test report。QA 产物统一落在 `.changes/qa/`（req-analysis / blackbox / whitebox / exec / knowledge），其中 `qa/knowledge/` 是长期项目知识，不随 issue 归档。
 
 `loctek-init` 会额外生成 `AGENTS.md`、`CLAUDE.md`、`.cursor/rules/loctek.mdc`，让 Codex、Claude Code、Cursor 等工具把关键决策沉淀到 `.changes/session-notes/`。常规 commit/merge/test 只读取活跃记录，不默认读取 `.changes/archive/`。
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loctek Test Req"
+  short_description: "Test-oriented requirement analysis baseline"
+  default_prompt: "Use $loctek-test-req to build a test baseline from this requirement document."

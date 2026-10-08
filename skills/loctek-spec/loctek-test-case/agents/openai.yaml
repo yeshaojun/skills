@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loctek Test Case"
+  short_description: "Design traceable black-box test cases"
+  default_prompt: "Use $loctek-test-case to generate black-box test cases from the requirement baseline."

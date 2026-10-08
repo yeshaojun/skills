@@ -9,6 +9,12 @@ Use it to preserve intent:
 - `intents/`: per-commit or per-change intent records.
 - `merge-reports/`: merge/rebase conflict reports.
 - `test-reports/`: risk-based test plans and results.
+- `qa/`: test design suite artifacts.
+  - `qa/req-analysis/`: test-oriented requirement analysis and REQ baselines.
+  - `qa/blackbox/`: black-box test case sets with coverage reports.
+  - `qa/whitebox/`: white-box walkthrough reports.
+  - `qa/exec/`: automated case execution reports and evidence.
+  - `qa/knowledge/`: long-lived project QA knowledge (historical bug lists, DB notes). Never archived with issues.
 - `pr/`: PR body drafts.
 - `session-notes/`: lightweight AI session decisions, implementation reasoning, rejected approaches, and merge-preserve notes.
 - `archive/`: completed Loctek records moved out of active context.

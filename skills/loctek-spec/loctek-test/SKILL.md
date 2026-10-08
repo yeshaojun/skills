@@ -1,6 +1,6 @@
 ---
 name: loctek-test
-description: 意图感知的测试计划和执行 skill。用于用户要求根据代码改动、issue、commit intent、merge report 生成测试计划，运行单元测试、集成测试、E2E、lint、typecheck、build，或验证合并后功能没有丢失时触发。参考成熟 webapp-testing 的 Playwright 验证思路，同时支持多语言项目的测试命令发现。
+description: 意图感知的测试计划和执行 skill。用于用户要求根据代码改动、issue、commit intent、merge report 生成测试计划，运行单元测试、集成测试、E2E、lint、typecheck、build，或验证合并后功能没有丢失时触发。参考成熟 webapp-testing 的 Playwright 验证思路，同时支持多语言项目的测试命令发现。与测试设计子家族分工：本 skill 执行项目自动化测试命令并写统一 test report；需求分析用 loctek-test-req，用例设计用 loctek-test-case，代码走查用 loctek-test-review，用例自动执行用 loctek-test-run。
 ---
 
 # Loctek Test

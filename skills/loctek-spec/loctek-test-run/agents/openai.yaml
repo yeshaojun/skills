@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loctek Test Run"
+  short_description: "Execute black-box cases with Playwright"
+  default_prompt: "Use $loctek-test-run to execute the generated test cases against the test environment."
